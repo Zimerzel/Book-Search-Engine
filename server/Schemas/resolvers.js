@@ -8,7 +8,7 @@ const resolvers = {
           if (context.user) {
             const userData = await User.findOne({ _id: context.user._id })
               .select('-__v -password')
-
+            console.log(userData);
             return userData;
         }
         throw new AuthenticationError('Not logged in');
@@ -40,19 +40,19 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async(parent, {input}, context) => {
+        saveBook: async(parent, { bookData }, context) => {
             if (context.user) {
                 const updatedUser = await User.findByIdAndUpdate(
                     {_id: context.user._id},
-                    {$addToSet: {savedBooks: input}},
+                    {$addToSet: {savedBooks: bookData}},
                     {new: true}
                 );
                 return updatedUser;
             }
-            throw new AuthenticiationError('ZYou need to be logged in!')
+            throw new AuthenticiationError('You need to be logged in!')
         },
 
-        deleteBook: async(parent, {input}, context) => {
+        removeBook: async(parent, {input}, context) => {
             if (context.user) {
                 const updatedUser = await User.findByIdAndUpdate(
                     {_id: context.user._id},

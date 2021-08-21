@@ -11,10 +11,12 @@ module.exports = {
 
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
-  authMiddleware: function ({ req }) {
+  authMiddleware: function ({req, res, next}) {
+    // console.log('WORKS')
+    // console.log(req.headers.authorization)
     // allows token to be sent via  req.query or headers
-    let token = req.query.token || req.headers.authorization || req.body.token;
-
+    let token = req.query.token || req.headers.authorization;
+    console.log('token', token)
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
       token = token.split(' ').pop().trim();
@@ -34,7 +36,7 @@ module.exports = {
     }
 
     // send to next endpoint
-    return req
+    return req;
   },
 
 };
